@@ -34,6 +34,7 @@ class Solution(object):
                 if arr_sum == 0:
                     ans.append([nums[i], nums[j], nums[k]])
                     j = self.next_best(nums,j)
+                    k = self.prev_best(nums, k)
                 elif arr_sum > 0:
                     k = self.prev_best(nums, k)
                 else:
