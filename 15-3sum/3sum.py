@@ -1,23 +1,47 @@
 import array
 
 class Solution(object):
+    def next_best(self,nums, idx):
+        next_idx =idx
+        while nums[idx] == nums[next_idx]:
+            next_idx+=1
+            if(next_idx == len(nums)-1):
+                return next_idx
+        return next_idx
+    
+    def prev_best(self,nums, idx):
+        prev_idx = idx
+        while nums[idx] == nums[prev_idx]:
+            prev_idx-=1
+            if(prev_idx == 0):
+                return prev_idx
+        return prev_idx
+    
     def threeSum(self, nums):
         """
         :type nums: List[int]
         :rtype: List[List[int]]
         """
+        i = 0
+        j = 1
+        k = len(nums) -1
+        nums.sort()
+
         ans = []
-        for i in range(len(nums)):
-            hashmap = {}
-            for j in range(i+1, len(nums)):
-                k = - (nums[i] + nums[j])
-                if k in hashmap:
-                    arr = [nums[i], nums[j], k]
-                    arr.sort()
-                    ans.append(arr)
-                    hashmap.pop(k)
+        while i < k:
+            while j < k:
+                arr_sum = nums[i] + nums[j] + nums[k]
+                if arr_sum == 0:
+                    ans.append([nums[i], nums[j], nums[k]])
+                    j = self.next_best(nums,j)
+                elif arr_sum > 0:
+                    k = self.prev_best(nums, k)
                 else:
-                    hashmap[nums[j]] = nums[j]
-        unique_tuples = set(tuple(x) for x in ans)
-        unique_lists = [list(x) for x in unique_tuples]
-        return unique_lists
+                    j = self.next_best(nums,j)
+            
+            i =self.next_best(nums,i)
+            j = i+1
+            k = len(nums) -1
+        return ans
+
+
