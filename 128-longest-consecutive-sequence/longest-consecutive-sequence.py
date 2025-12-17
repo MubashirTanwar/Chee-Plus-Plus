@@ -1,45 +1,20 @@
-
 class Solution(object):
     def longestConsecutive(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        hashmap = {}
-        if(len(nums)<1):
+        if not nums:
             return 0
-        for num in nums:
-            if num in hashmap:
-                continue
-            if(num+1 in hashmap):
-                hashmap[num]= num+1
-            if(num-1 in hashmap):
-                hashmap[num-1] = num
-            if(num not in hashmap):
-                hashmap[num] = None
-        
-        max_count = 1
-        length_cache = {}
 
-        for item in hashmap:
-            if item in length_cache:
-                continue
+        num_set = set(nums)
+        longest = 0
 
-            current = item
-            stack = []
+        for num in num_set:
+            if num - 1 not in num_set:
+                current = num
+                count = 1
 
-            while current is not None and current not in length_cache:
-                stack.append(current)
-                current = hashmap[current]
+                while current + 1 in num_set:
+                    current += 1
+                    count += 1
 
-            # if we hit a known length, use it; otherwise start from 0
-            count = length_cache[current] if current in length_cache else 0
+                longest = max(longest, count)
 
-            # backfill lengths
-            while stack:
-                count += 1
-                length_cache[stack.pop()] = count
-
-            max_count = max(max_count, length_cache[item])
-
-        return max_count
+        return longest
